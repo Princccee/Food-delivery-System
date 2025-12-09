@@ -1,5 +1,9 @@
-package com.fooddelivery.restaurant_service.restaurant;
+package com.fooddelivery.restaurant_service.service;
 
+import com.fooddelivery.restaurant_service.restaurant.Restaurant;
+import com.fooddelivery.restaurant_service.Repository.RestaurantRepository;
+import com.fooddelivery.restaurant_service.DTO.RestaurantRequest;
+import com.fooddelivery.restaurant_service.DTO.RestaurantResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -1,5 +1,6 @@
-package com.fooddelivery.restaurant_service.restaurant;
+package com.fooddelivery.restaurant_service.Repository;
 
+import com.fooddelivery.restaurant_service.restaurant.Restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

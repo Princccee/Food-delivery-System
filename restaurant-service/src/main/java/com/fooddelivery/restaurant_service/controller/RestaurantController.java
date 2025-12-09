@@ -1,5 +1,8 @@
-package com.fooddelivery.restaurant_service.restaurant;
+package com.fooddelivery.restaurant_service.controller;
 
+import com.fooddelivery.restaurant_service.DTO.RestaurantRequest;
+import com.fooddelivery.restaurant_service.DTO.RestaurantResponse;
+import com.fooddelivery.restaurant_service.service.RestaurantService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,5 +1,9 @@
-package com.fooddelivery.restaurant_service.restaurant;
+package com.fooddelivery.restaurant_service.service;
 
+import com.fooddelivery.restaurant_service.DTO.MenuItemRequest;
+import com.fooddelivery.restaurant_service.Repository.MenuItemRepository;
+import com.fooddelivery.restaurant_service.Repository.RestaurantRepository;
+import com.fooddelivery.restaurant_service.restaurant.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

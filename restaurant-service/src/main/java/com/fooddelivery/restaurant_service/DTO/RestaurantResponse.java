@@ -1,4 +1,4 @@
-package com.fooddelivery.restaurant_service.restaurant;
+package com.fooddelivery.restaurant_service.DTO;
 
 import lombok.Builder;
 import lombok.Data;
