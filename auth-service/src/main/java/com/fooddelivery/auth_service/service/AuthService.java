@@ -40,7 +40,6 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest request) {
-        // authenticate with email/password
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -48,8 +47,10 @@ public class AuthService {
                 )
         );
 
-        // if no exception -> valid credentials
-        String jwt = jwtService.generateToken(request.getEmail());
+        var user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        String jwt = jwtService.generateToken(user.getEmail(), user.getRole().name());
         return new AuthResponse(jwt);
     }
 }
