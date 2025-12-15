@@ -118,4 +118,42 @@ public class OrderService {
                 .updatedAt(o.getUpdatedAt())
                 .build();
     }
+
+    public void markPaid(UUID orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
+
+        // Idempotency: if already paid, ignore
+        if (order.getPaymentStatus() == PaymentStatus.PAID) {
+            return;
+        }
+
+        order.setPaymentStatus(PaymentStatus.PAID);
+        order.setStatus(OrderStatus.CONFIRMED);    // business rule: order becomes “confirmed” on successful payment
+        order.setUpdatedAt(Instant.now());
+
+        orderRepository.save(order);
+    }
+
+
+    public void markPaymentFailed(UUID orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found: " + orderId));
+
+        // If already marked failed, skip
+        if (order.getPaymentStatus() == PaymentStatus.FAILED) {
+            return;
+        }
+
+        order.setPaymentStatus(PaymentStatus.FAILED);
+
+        // Business decision:
+        // When payment fails, order should not proceed. Usually marked as CANCELLED.
+        order.setStatus(OrderStatus.CANCELLED);
+
+        order.setUpdatedAt(Instant.now());
+
+        orderRepository.save(order);
+    }
+
 }

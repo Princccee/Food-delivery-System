@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Razorpay Test Checkout</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+<h2>Razorpay Checkout Test</h2>
+<button id="payBtn">Pay ₹500.00</button>
+
+<script>
+    const options = {
+        "key": "rzp_test_RqiwET76fWZTmI", // razorpayKeyId from /payments/initiate
+        "amount": "50000",                // amount in paise
+        "currency": "INR",
+        "name": "Test Shop",
+        "description": "Order Payment",
+        "order_id": "order_Rrzu8Q9S9Gw0Az", // razorpayOrderId from /payments/initiate
+        "handler": function (response){
+            // this is client-side success notification (optional)
+            console.log("payment success details:", response);
+            alert("Payment completed! Razorpay payment id: " + response.razorpay_payment_id +
+                "\nSignature: " + response.razorpay_signature);
+            // Optionally POST these to your Payment Service /payments/verify
+            /*
+            fetch('http://localhost:8084/payments/verify', {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify({
+                paymentId: 'c63a7f32-2abe-48ba-b211-987bdd5f036a', // your paymentId
+                razorpayOrderId: response.razorpay_order_id,
+                razorpayPaymentId: response.razorpay_payment_id,
+                razorpaySignature: response.razorpay_signature
+              })
+            }).then(r => r.json()).then(console.log);
+            */
+        },
+        "prefill": {
+            "name": "Test User",
+            "email": "test@example.com",
+            "contact": "9999999999"
+        },
+        "theme": { "color": "#3399cc" }
+    };
+
+    document.getElementById('payBtn').onclick = function(e){
+        var rzp = new Razorpay(options);
+        rzp.open();
+        e.preventDefault();
+    };
+</script>
+</body>
+</html>
