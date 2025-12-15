@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -56,4 +57,17 @@ public class OrderController {
     ) {
         return ResponseEntity.ok(orderService.updateOrderStatus(orderId, status));
     }
+
+    // in your existing OrderController
+    @PostMapping("/{orderId}/payment-callback")
+    public ResponseEntity<?> paymentCallback(@PathVariable UUID orderId, @RequestBody Map<String, String> body) {
+        String status = body.get("status");
+        if ("SUCCESS".equalsIgnoreCase(status)) {
+            orderService.markPaid(orderId); // implement this: set paymentStatus=PAID and update order status
+        } else {
+            orderService.markPaymentFailed(orderId); // implement accordingly
+        }
+        return ResponseEntity.ok().build();
+    }
+
 }
