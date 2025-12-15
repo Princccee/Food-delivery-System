@@ -39,6 +39,7 @@ public class PaymentService {
     private String orderServiceBaseUrl;
 
     @Value("${razorpay.webhook-secret}")
+//    @Value("${razorpay.webhook.secret}")
     private String razorpayWebhookSecret;
 
     private static final String RAZORPAY_ORDER_API = "https://api.razorpay.com/v1/orders";
@@ -87,7 +88,7 @@ public class PaymentService {
     public void verifyClientPayment(VerifyRequest req) {
         // validate signature: order_id|payment_id
         String payload = req.getRazorpayOrderId() + "|" + req.getRazorpayPaymentId();
-        String signature = HmacUtils.calculateHmacSHA256(payload, razorpayKeySecret);
+        String signature = HmacUtils.hmacSha256Hex(razorpayKeySecret, payload);
         if (!signature.equals(req.getRazorpaySignature())) {
             throw new RuntimeException("Invalid signature");
         }
@@ -107,7 +108,7 @@ public class PaymentService {
     public void handleWebhook(String rawBody, String signatureHeader) {
 
         // compute sha256 HMAC using webhook secret (NOT API secret)
-        String computedSignature = HmacUtils.calculateHmacSHA256(rawBody, razorpayWebhookSecret);
+        String computedSignature = HmacUtils.hmacSha256Hex(razorpayWebhookSecret, rawBody);
 
         if (!computedSignature.equals(signatureHeader)) {
             throw new RuntimeException("Invalid webhook signature");
@@ -133,7 +134,9 @@ public class PaymentService {
                 p.setRazorpayPaymentId(rPaymentId);
                 p.setStatus(PaymentStatus.SUCCESS);
                 p.setUpdatedAt(Instant.now());
-                p.setRawPayload(rawBody);
+                if (p.getRawPayload() == null) {
+                    p.setRawPayload(rawBody);
+                }
 
                 paymentRepository.save(p);
 
@@ -149,7 +152,9 @@ public class PaymentService {
                     Payment p = opt.get();
                     p.setStatus(PaymentStatus.FAILED);
                     p.setUpdatedAt(Instant.now());
-                    p.setRawPayload(rawBody);
+                    if (p.getRawPayload() == null) {
+                        p.setRawPayload(rawBody);
+                    }
                     paymentRepository.save(p);
 
                     notifyOrderService(p, "FAILED");

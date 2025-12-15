@@ -27,15 +27,26 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/health").permitAll()
+
+                        // customer APIs
                         .requestMatchers(HttpMethod.POST, "/api/orders").hasRole("CUSTOMER")
                         .requestMatchers(HttpMethod.GET, "/api/orders/customer/**").hasRole("CUSTOMER")
+
+                        // restaurant APIs
                         .requestMatchers(HttpMethod.GET, "/api/orders/restaurant/**").hasRole("RESTAURANT_OWNER")
                         .requestMatchers(HttpMethod.PUT, "/api/orders/*/status").hasRole("RESTAURANT_OWNER")
+
+                        // 🔥 payment callback (internal)
+                        .requestMatchers(HttpMethod.POST, "/api/orders/*/payment-callback").permitAll()
+
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                );
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
 
         return http.build();
     }

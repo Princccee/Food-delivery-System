@@ -5,13 +5,17 @@ import com.fooddelivery.payment_service.dto.InitiateResponse;
 import com.fooddelivery.payment_service.dto.VerifyRequest;
 import com.fooddelivery.payment_service.model.Payment;
 import com.fooddelivery.payment_service.service.PaymentService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/payments")
@@ -32,12 +36,39 @@ public class PaymentController {
         return ResponseEntity.ok().body(Map.of("status", "ok"));
     }
 
+//    @PostMapping("/webhook")
+//    public ResponseEntity<?> webhook(@RequestHeader("X-Razorpay-Signature") String signature,
+//                                     @RequestBody String rawBody) {
+//        paymentService.handleWebhook(rawBody, signature);
+//        return ResponseEntity.ok().build();
+//    }
+
+//    @PostMapping("/webhook")
+//    public ResponseEntity<Void> webhook(HttpServletRequest request,
+//                                        @RequestHeader("X-Razorpay-Signature") String signature
+//    ) throws IOException {
+//
+//        String rawBody = request.getReader()
+//                .lines()
+//                .collect(Collectors.joining("\n"));
+//
+//        paymentService.handleWebhook(rawBody, signature);
+//        return ResponseEntity.ok().build();
+//    }
+
     @PostMapping("/webhook")
-    public ResponseEntity<?> webhook(@RequestHeader("X-Razorpay-Signature") String signature,
-                                     @RequestBody String rawBody) {
+    public ResponseEntity<Void> webhook(
+            HttpServletRequest request,
+            @RequestHeader("X-Razorpay-Signature") String signature
+    ) throws IOException {
+
+        byte[] rawBytes = request.getInputStream().readAllBytes();
+        String rawBody = new String(rawBytes, StandardCharsets.UTF_8);
+
         paymentService.handleWebhook(rawBody, signature);
         return ResponseEntity.ok().build();
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Payment> getPayment(@PathVariable UUID id) {

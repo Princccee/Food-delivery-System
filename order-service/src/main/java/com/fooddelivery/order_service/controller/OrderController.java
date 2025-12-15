@@ -59,7 +59,7 @@ public class OrderController {
     }
 
     // in your existing OrderController
-    @PostMapping("/api/orders/{orderId}/payment-callback")
+    @PostMapping("/{orderId}/payment-callback")
     public ResponseEntity<?> paymentCallback(@PathVariable UUID orderId, @RequestBody Map<String, String> body) {
         String status = body.get("status");
         if ("SUCCESS".equalsIgnoreCase(status)) {

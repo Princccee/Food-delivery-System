@@ -44,5 +44,7 @@ public class Payment {
     private Instant updatedAt;
 
     @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "raw_payload", columnDefinition = "LONGTEXT")
     private String rawPayload;
 }
