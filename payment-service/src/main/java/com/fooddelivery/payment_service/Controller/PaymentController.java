@@ -36,26 +36,6 @@ public class PaymentController {
         return ResponseEntity.ok().body(Map.of("status", "ok"));
     }
 
-//    @PostMapping("/webhook")
-//    public ResponseEntity<?> webhook(@RequestHeader("X-Razorpay-Signature") String signature,
-//                                     @RequestBody String rawBody) {
-//        paymentService.handleWebhook(rawBody, signature);
-//        return ResponseEntity.ok().build();
-//    }
-
-//    @PostMapping("/webhook")
-//    public ResponseEntity<Void> webhook(HttpServletRequest request,
-//                                        @RequestHeader("X-Razorpay-Signature") String signature
-//    ) throws IOException {
-//
-//        String rawBody = request.getReader()
-//                .lines()
-//                .collect(Collectors.joining("\n"));
-//
-//        paymentService.handleWebhook(rawBody, signature);
-//        return ResponseEntity.ok().build();
-//    }
-
     @PostMapping("/webhook")
     public ResponseEntity<Void> webhook(
             HttpServletRequest request,

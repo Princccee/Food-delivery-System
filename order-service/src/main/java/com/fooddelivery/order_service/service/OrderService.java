@@ -21,7 +21,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final RestTemplate restTemplate; // bean to configure
-    private final String restaurantBaseUrl = "http://localhost:8082/"; // or read from config
+    private final String restaurantBaseUrl = "http://localhost:8082"; // or read from config
 
     private UUID userIdFromEmail(String email) {
         return UUID.nameUUIDFromBytes(email.getBytes());
@@ -34,7 +34,7 @@ public class OrderService {
 
         // Option A (recommended): call restaurant-service to resolve prices
         // GET /api/restaurants/{restaurantId}/menu-items and find items by id
-        var menuItems = restTemplate.getForObject(restaurantBaseUrl + "/restaurants/" + restaurantId + "/menu-items", com.fasterxml.jackson.databind.JsonNode.class);
+        var menuItems = restTemplate.getForObject(restaurantBaseUrl + "/menu-items/internal/" + restaurantId , com.fasterxml.jackson.databind.JsonNode.class);
 
         // Convert requested items into OrderItem entities and compute totals
         List<OrderItem> orderItems = req.getItems().stream().map(itemReq -> {
