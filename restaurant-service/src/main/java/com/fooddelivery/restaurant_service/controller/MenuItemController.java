@@ -26,10 +26,18 @@ public class MenuItemController {
         return ResponseEntity.ok(menuItemService.createMenuItem(restaurantId, request));
     }
 
-    @GetMapping("/{restaurantId}/")
+    @GetMapping("/{restaurantId}")
     public ResponseEntity<List<MenuItem>> getMenuForRestaurant(
             @PathVariable UUID restaurantId
     ) {
         return ResponseEntity.ok(menuItemService.getMenuForRestaurant(restaurantId));
     }
+
+    @GetMapping("/internal/{restaurantId}")
+    public ResponseEntity<List<MenuItem>> getMenuForRestaurantInternal(
+            @PathVariable UUID restaurantId
+    ) {
+        return ResponseEntity.ok(menuItemService.getMenuForRestaurant(restaurantId));
+    }
+
 }

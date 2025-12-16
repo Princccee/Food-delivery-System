@@ -26,10 +26,14 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+                        // 🔥 INTERNAL SERVICE CALLS
+                        .requestMatchers("/menu-items/internal/**").permitAll()
+
                         // public endpoints
                         .requestMatchers("/health").permitAll()
                         .requestMatchers(HttpMethod.GET, "/restaurants/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/menu-items/**").permitAll()
+
                         // owner-only endpoints
                         .requestMatchers(HttpMethod.POST, "/restaurants/**").hasRole("RESTAURANT_OWNER")
                         .requestMatchers(HttpMethod.PUT, "/restaurants/**").hasRole("RESTAURANT_OWNER")
