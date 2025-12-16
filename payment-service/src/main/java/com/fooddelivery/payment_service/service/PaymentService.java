@@ -39,7 +39,6 @@ public class PaymentService {
     private String orderServiceBaseUrl;
 
     @Value("${razorpay.webhook-secret}")
-//    @Value("${razorpay.webhook.secret}")
     private String razorpayWebhookSecret;
 
     private static final String RAZORPAY_ORDER_API = "https://api.razorpay.com/v1/orders";
