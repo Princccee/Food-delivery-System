@@ -29,12 +29,12 @@ public class SecurityConfig {
                         // public endpoints
                         .requestMatchers("/health").permitAll()
                         .requestMatchers(HttpMethod.GET, "/restaurants/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/restaurants/*/menu-items").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/menu-items/**").permitAll()
                         // owner-only endpoints
                         .requestMatchers(HttpMethod.POST, "/restaurants/**").hasRole("RESTAURANT_OWNER")
                         .requestMatchers(HttpMethod.PUT, "/restaurants/**").hasRole("RESTAURANT_OWNER")
                         .requestMatchers(HttpMethod.DELETE, "/restaurants/**").hasRole("RESTAURANT_OWNER")
-                        .requestMatchers("/menu-items/**").hasRole("RESTAURANT_OWNER")
+//                        .requestMatchers("/menu-items/**").hasRole("RESTAURANT_OWNER")
                         // any other must be authenticated
                         .anyRequest().authenticated()
                 )
