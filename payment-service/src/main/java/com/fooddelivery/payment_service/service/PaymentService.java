@@ -2,14 +2,15 @@ package com.fooddelivery.payment_service.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fooddelivery.payment_service.dto.InitiateRequest;
+import com.fooddelivery.payment_service.events.PaymentEvent;
 import com.fooddelivery.payment_service.dto.InitiateResponse;
 import com.fooddelivery.payment_service.dto.VerifyRequest;
+import com.fooddelivery.payment_service.kafka.PaymentEventProducer;
 import com.fooddelivery.payment_service.model.Payment;
 import com.fooddelivery.payment_service.model.PaymentStatus;
 import com.fooddelivery.payment_service.repository.PaymentRepository;
 import com.fooddelivery.payment_service.util.HmacUtils;
-import com.fooddelivery.events.OrderCreatedEvent;
+import com.fooddelivery.payment_service.events.OrderCreatedEvent;
 import lombok.extern.slf4j.Slf4j;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,8 @@ public class PaymentService {
 
     @Value("${razorpay.webhook-secret}")
     private String razorpayWebhookSecret;
+
+    private final PaymentEventProducer paymentEventProducer;
 
     private static final String RAZORPAY_ORDER_API = "https://api.razorpay.com/v1/orders";
 
@@ -134,9 +137,17 @@ public class PaymentService {
 //                    p.setRawPayload(rawBody);
 //                }
 
-                paymentRepository.save(p);
+                Payment saved = paymentRepository.save(p);
 
-                notifyOrderService(p, "SUCCESS");
+//                notifyOrderService(p, "SUCCESS");
+
+                // Create a payment success event
+                paymentEventProducer.publishPaymentEvent(
+                        new PaymentEvent(
+                                saved.getId(),
+                                saved.getStatus().toString()
+                        )
+                );
 
             } else if ("payment.failed".equals(eventName)) {
 
@@ -148,12 +159,19 @@ public class PaymentService {
                     Payment p = opt.get();
                     p.setStatus(PaymentStatus.FAILED);
                     p.setUpdatedAt(Instant.now());
-//                    if (p.getRawPayload() == null) {
-//                        p.setRawPayload(rawBody);
-//                    }
-                    paymentRepository.save(p);
 
-                    notifyOrderService(p, "FAILED");
+                    Payment saved = paymentRepository.save(p);
+
+//                notifyOrderService(p, "SUCCESS");
+
+                    paymentEventProducer.publishPaymentEvent(
+                            new PaymentEvent(
+                                    saved.getOrderId(),
+                                    saved.getStatus().toString()
+                            )
+                    );
+
+//                    notifyOrderService(p, "FAILED");
                 }
             }
 

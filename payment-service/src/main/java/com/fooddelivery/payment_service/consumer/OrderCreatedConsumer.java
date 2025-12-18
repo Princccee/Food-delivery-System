@@ -1,6 +1,6 @@
 package com.fooddelivery.payment_service.consumer;
 
-import com.fooddelivery.events.OrderCreatedEvent;
+import com.fooddelivery.payment_service.events.OrderCreatedEvent;
 import com.fooddelivery.payment_service.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
