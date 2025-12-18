@@ -47,24 +47,16 @@ public class PaymentService {
     private static final String RAZORPAY_ORDER_API = "https://api.razorpay.com/v1/orders";
 
     @Transactional
-    public InitiateResponse initiateOrder(InitiateRequest req) {
-        // create local payment entry
-        Payment payment = Payment.builder()
-                .orderId(req.getOrderId())
-                .amount(req.getAmount())
-                .currency(req.getCurrency() == null ? "INR" : req.getCurrency())
-                .status(PaymentStatus.PENDING)
-                .createdAt(Instant.now())
-//                .rawPayload(null)
-                .build();
+    public InitiateResponse makePayment(UUID orderId) {
+        // we have already registered the payment record in the DB, we just need to fetch that record and request the razorpay to accept payment.
 
-        payment = paymentRepository.save(payment);
+        Payment payment = paymentRepository.findByOrderId(orderId).orElseThrow(() -> new RuntimeException("Payment not found"));
 
         // create Razorpay order
         Map<String, Object> payload = Map.of(
-                "amount", req.getAmount(),
+                "amount", payment.getAmount(),
                 "currency", payment.getCurrency(),
-                "receipt", req.getOrderId().toString(),
+                "receipt", payment.getOrderId().toString(),
                 "payment_capture", 1
         );
 
@@ -81,9 +73,11 @@ public class PaymentService {
 
         String razorpayOrderId = response.getBody().get("id").asText();
         payment.setRazorpayOrderId(razorpayOrderId);
+
         paymentRepository.save(payment);
 
         return new InitiateResponse(payment.getId(), razorpayOrderId, razorpayKeyId, payment.getAmount(), payment.getCurrency());
+
     }
 
     @Transactional
