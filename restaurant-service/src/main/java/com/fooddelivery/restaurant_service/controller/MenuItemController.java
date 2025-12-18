@@ -12,13 +12,13 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/restaurants")
+@RequestMapping("/menu-items")
 @RequiredArgsConstructor
 public class MenuItemController {
 
     private final MenuItemService menuItemService;
 
-    @PostMapping("/{restaurantId}/menu-items")
+    @PostMapping("/{restaurantId}")
     public ResponseEntity<MenuItem> addMenuItem(
             @PathVariable UUID restaurantId,
             @Valid @RequestBody MenuItemRequest request
@@ -26,10 +26,18 @@ public class MenuItemController {
         return ResponseEntity.ok(menuItemService.createMenuItem(restaurantId, request));
     }
 
-    @GetMapping("/{restaurantId}/menu-items")
+    @GetMapping("/{restaurantId}")
     public ResponseEntity<List<MenuItem>> getMenuForRestaurant(
             @PathVariable UUID restaurantId
     ) {
         return ResponseEntity.ok(menuItemService.getMenuForRestaurant(restaurantId));
     }
+
+    @GetMapping("/internal/{restaurantId}")
+    public ResponseEntity<List<MenuItem>> getMenuForRestaurantInternal(
+            @PathVariable UUID restaurantId
+    ) {
+        return ResponseEntity.ok(menuItemService.getMenuForRestaurant(restaurantId));
+    }
+
 }

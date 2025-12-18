@@ -26,8 +26,11 @@ public class PaymentController {
 
     @PostMapping("/initiate")
     public ResponseEntity<InitiateResponse> initiate(@Valid @RequestBody InitiateRequest req) {
-        InitiateResponse resp = paymentService.initiateOrder(req);
-        return ResponseEntity.ok(resp);
+        throw new IllegalStateException(
+                "Payments are initiated via Kafka (OrderCreatedEvent), not HTTP"
+        );
+//        InitiateResponse resp = paymentService.initiateOrder(req);
+//        return ResponseEntity.ok(resp);
     }
 
     @PostMapping("/verify")
@@ -35,26 +38,6 @@ public class PaymentController {
         paymentService.verifyClientPayment(req);
         return ResponseEntity.ok().body(Map.of("status", "ok"));
     }
-
-//    @PostMapping("/webhook")
-//    public ResponseEntity<?> webhook(@RequestHeader("X-Razorpay-Signature") String signature,
-//                                     @RequestBody String rawBody) {
-//        paymentService.handleWebhook(rawBody, signature);
-//        return ResponseEntity.ok().build();
-//    }
-
-//    @PostMapping("/webhook")
-//    public ResponseEntity<Void> webhook(HttpServletRequest request,
-//                                        @RequestHeader("X-Razorpay-Signature") String signature
-//    ) throws IOException {
-//
-//        String rawBody = request.getReader()
-//                .lines()
-//                .collect(Collectors.joining("\n"));
-//
-//        paymentService.handleWebhook(rawBody, signature);
-//        return ResponseEntity.ok().build();
-//    }
 
     @PostMapping("/webhook")
     public ResponseEntity<Void> webhook(
