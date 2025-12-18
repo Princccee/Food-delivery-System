@@ -20,7 +20,7 @@ public class OrderCreatedConsumer {
             containerFactory = "kafkaListenerContainerFactory"
     )
     public void handleOrderCreated(OrderCreatedEvent event) {
-        log.info("📥 Received ORDER_CREATED event for order {}", event.getOrderId());
+        log.info("📥 Received ORDER_CREATED event for order {} of amount {}", event.getOrderId(), event.getAmount());
         paymentService.createPaymentFromOrder(event);
     }
 }

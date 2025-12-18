@@ -55,7 +55,7 @@ public class PaymentService {
                 .currency(req.getCurrency() == null ? "INR" : req.getCurrency())
                 .status(PaymentStatus.PENDING)
                 .createdAt(Instant.now())
-                .rawPayload(null)
+//                .rawPayload(null)
                 .build();
 
         payment = paymentRepository.save(payment);
@@ -136,9 +136,9 @@ public class PaymentService {
                 p.setRazorpayPaymentId(rPaymentId);
                 p.setStatus(PaymentStatus.SUCCESS);
                 p.setUpdatedAt(Instant.now());
-                if (p.getRawPayload() == null) {
-                    p.setRawPayload(rawBody);
-                }
+//                if (p.getRawPayload() == null) {
+//                    p.setRawPayload(rawBody);
+//                }
 
                 paymentRepository.save(p);
 
@@ -154,9 +154,9 @@ public class PaymentService {
                     Payment p = opt.get();
                     p.setStatus(PaymentStatus.FAILED);
                     p.setUpdatedAt(Instant.now());
-                    if (p.getRawPayload() == null) {
-                        p.setRawPayload(rawBody);
-                    }
+//                    if (p.getRawPayload() == null) {
+//                        p.setRawPayload(rawBody);
+//                    }
                     paymentRepository.save(p);
 
                     notifyOrderService(p, "FAILED");
@@ -202,9 +202,10 @@ public class PaymentService {
             return;
         }
 
+        System.out.println("Amount: " + event.getAmount());
         Payment payment = Payment.builder()
                 .orderId(event.getOrderId())
-                .amount((long) (event.getTotalAmount() * 100)) // paise
+                .amount((event.getAmount() * 100)) // paise
                 .currency("INR")
                 .status(PaymentStatus.PENDING)
                 .createdAt(Instant.now())

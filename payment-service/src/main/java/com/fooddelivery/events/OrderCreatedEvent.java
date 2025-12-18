@@ -13,5 +13,5 @@ public class OrderCreatedEvent {
     private UUID orderId;
     private UUID customerId;
     private UUID restaurantId;
-    private double totalAmount;
+    private Double amount;
 }

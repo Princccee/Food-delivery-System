@@ -29,7 +29,7 @@ public class Payment {
     private String razorpayPaymentId;
 
     @Column(nullable = false)
-    private Long amount;            // in paise
+    private double amount;            // in paise
 
     @Column(nullable = false)
     private String currency;
@@ -43,8 +43,8 @@ public class Payment {
     @Column
     private Instant updatedAt;
 
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(name = "raw_payload", columnDefinition = "LONGTEXT")
-    private String rawPayload;
+//    @Lob
+//    @Basic(fetch = FetchType.LAZY)
+//    @Column(name = "raw_payload", columnDefinition = "LONGTEXT")
+//    private String rawPayload;
 }
