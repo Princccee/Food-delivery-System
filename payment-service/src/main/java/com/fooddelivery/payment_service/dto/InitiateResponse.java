@@ -11,6 +11,6 @@ public class InitiateResponse {
     private UUID paymentId;
     private String razorpayOrderId;
     private String razorpayKeyId;
-    private Long amount;
+    private double amount;
     private String currency;
 }

@@ -9,6 +9,8 @@ import com.fooddelivery.payment_service.model.Payment;
 import com.fooddelivery.payment_service.model.PaymentStatus;
 import com.fooddelivery.payment_service.repository.PaymentRepository;
 import com.fooddelivery.payment_service.util.HmacUtils;
+import com.fooddelivery.events.OrderCreatedEvent;
+import lombok.extern.slf4j.Slf4j;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +23,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PaymentService {
@@ -52,7 +55,7 @@ public class PaymentService {
                 .currency(req.getCurrency() == null ? "INR" : req.getCurrency())
                 .status(PaymentStatus.PENDING)
                 .createdAt(Instant.now())
-                .rawPayload(null)
+//                .rawPayload(null)
                 .build();
 
         payment = paymentRepository.save(payment);
@@ -133,9 +136,9 @@ public class PaymentService {
                 p.setRazorpayPaymentId(rPaymentId);
                 p.setStatus(PaymentStatus.SUCCESS);
                 p.setUpdatedAt(Instant.now());
-                if (p.getRawPayload() == null) {
-                    p.setRawPayload(rawBody);
-                }
+//                if (p.getRawPayload() == null) {
+//                    p.setRawPayload(rawBody);
+//                }
 
                 paymentRepository.save(p);
 
@@ -151,9 +154,9 @@ public class PaymentService {
                     Payment p = opt.get();
                     p.setStatus(PaymentStatus.FAILED);
                     p.setUpdatedAt(Instant.now());
-                    if (p.getRawPayload() == null) {
-                        p.setRawPayload(rawBody);
-                    }
+//                    if (p.getRawPayload() == null) {
+//                        p.setRawPayload(rawBody);
+//                    }
                     paymentRepository.save(p);
 
                     notifyOrderService(p, "FAILED");
@@ -188,5 +191,28 @@ public class PaymentService {
 
     public Optional<Payment> findById(UUID id) {
         return paymentRepository.findById(id);
+    }
+
+    @Transactional
+    public void createPaymentFromOrder(OrderCreatedEvent event) {
+
+        // Idempotency: avoid duplicate payment rows
+        if (paymentRepository.findByOrderId(event.getOrderId()).isPresent()) {
+            log.info("⚠️ Payment already exists for order {}", event.getOrderId());
+            return;
+        }
+
+        System.out.println("Amount: " + event.getAmount());
+        Payment payment = Payment.builder()
+                .orderId(event.getOrderId())
+                .amount((event.getAmount() * 100)) // paise
+                .currency("INR")
+                .status(PaymentStatus.PENDING)
+                .createdAt(Instant.now())
+                .build();
+
+        paymentRepository.save(payment);
+
+        log.info("💰 Payment record CREATED for order {}", event.getOrderId());
     }
 }

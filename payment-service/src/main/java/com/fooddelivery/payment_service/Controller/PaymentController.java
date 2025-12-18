@@ -26,8 +26,11 @@ public class PaymentController {
 
     @PostMapping("/initiate")
     public ResponseEntity<InitiateResponse> initiate(@Valid @RequestBody InitiateRequest req) {
-        InitiateResponse resp = paymentService.initiateOrder(req);
-        return ResponseEntity.ok(resp);
+        throw new IllegalStateException(
+                "Payments are initiated via Kafka (OrderCreatedEvent), not HTTP"
+        );
+//        InitiateResponse resp = paymentService.initiateOrder(req);
+//        return ResponseEntity.ok(resp);
     }
 
     @PostMapping("/verify")

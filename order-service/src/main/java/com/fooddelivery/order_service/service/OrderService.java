@@ -3,6 +3,8 @@ package com.fooddelivery.order_service.service;
 import com.fooddelivery.order_service.DTO.PlaceOrderRequest;
 import com.fooddelivery.order_service.DTO.OrderItemResponse;
 import com.fooddelivery.order_service.DTO.OrderResponse;
+import com.fooddelivery.order_service.events.OrderCreatedEvent;
+import com.fooddelivery.order_service.kafka.OrderEventProducer;
 import com.fooddelivery.order_service.order.*;
 import com.fooddelivery.order_service.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final RestTemplate restTemplate; // bean to configure
     private final String restaurantBaseUrl = "http://localhost:8082"; // or read from config
+    private final OrderEventProducer orderEventProducer;
 
     private UUID userIdFromEmail(String email) {
         return UUID.nameUUIDFromBytes(email.getBytes());
@@ -32,8 +35,7 @@ public class OrderService {
         UUID customerId = userIdFromEmail(customerEmail);
         UUID restaurantId = req.getRestaurantId();
 
-        // Option A (recommended): call restaurant-service to resolve prices
-        // GET /api/restaurants/{restaurantId}/menu-items and find items by id
+        // call restaurant-service to resolve prices
         var menuItems = restTemplate.getForObject(restaurantBaseUrl + "/menu-items/internal/" + restaurantId , com.fasterxml.jackson.databind.JsonNode.class);
 
         // Convert requested items into OrderItem entities and compute totals
@@ -63,6 +65,16 @@ public class OrderService {
                 .build();
 
         Order saved = orderRepository.save(order);
+
+        // Publish event
+        orderEventProducer.publishOrderCreated(
+                new OrderCreatedEvent(
+                        saved.getId(),
+                        saved.getCustomerId(),
+                        saved.getRestaurantId(),
+                        saved.getTotalAmount()
+                )
+        );
 
         return toResponse(saved);
     }
