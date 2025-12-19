@@ -144,7 +144,7 @@ public class PaymentService {
                 // Create a payment success event
                 paymentEventProducer.publishPaymentEvent(
                         new PaymentEvent(
-                                saved.getId(),
+                                saved.getOrderId(),
                                 saved.getStatus().toString()
                         )
                 );
