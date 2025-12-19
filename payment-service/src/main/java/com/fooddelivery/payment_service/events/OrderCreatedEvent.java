@@ -1,4 +1,4 @@
-package com.fooddelivery.events;
+package com.fooddelivery.payment_service.events;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
