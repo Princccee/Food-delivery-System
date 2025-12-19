@@ -3,6 +3,7 @@ package com.fooddelivery.order_service.controller;
 import com.fooddelivery.order_service.DTO.PlaceOrderRequest;
 import com.fooddelivery.order_service.DTO.OrderResponse;
 import com.fooddelivery.order_service.order.OrderStatus;
+import com.fooddelivery.order_service.order.PaymentStatus;
 import com.fooddelivery.order_service.service.OrderService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -49,14 +50,14 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getOrdersByRestaurant(restaurantId));
     }
 
-    // restaurant owner updates status
-    @PutMapping("/{orderId}/status")
-    public ResponseEntity<OrderResponse> updateStatus(
-            @PathVariable UUID orderId,
-            @RequestParam OrderStatus status
-    ) {
-        return ResponseEntity.ok(orderService.updateOrderStatus(orderId, status));
-    }
+//    // restaurant owner updates status
+//    @PutMapping("/{orderId}/status")
+//    public ResponseEntity<OrderResponse> updateStatus(
+//            @PathVariable UUID orderId,
+//            @RequestParam OrderStatus status
+//    ) {
+//        return ResponseEntity.ok(orderService.updateOrderStatus(orderId, PaymentStatus.PENDING, status));
+//    }
 
     // in your existing OrderController
     @PostMapping("/{orderId}/payment-callback")
