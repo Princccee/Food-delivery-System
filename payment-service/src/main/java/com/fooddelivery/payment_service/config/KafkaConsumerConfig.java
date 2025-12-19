@@ -1,6 +1,6 @@
 package com.fooddelivery.payment_service.config;
 
-import com.fooddelivery.events.OrderCreatedEvent;
+import com.fooddelivery.payment_service.events.OrderCreatedEvent;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;

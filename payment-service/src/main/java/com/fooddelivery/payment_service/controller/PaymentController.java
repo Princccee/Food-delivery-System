@@ -1,6 +1,5 @@
-package com.fooddelivery.payment_service.Controller;
+package com.fooddelivery.payment_service.controller;
 
-import com.fooddelivery.payment_service.dto.InitiateRequest;
 import com.fooddelivery.payment_service.dto.InitiateResponse;
 import com.fooddelivery.payment_service.dto.VerifyRequest;
 import com.fooddelivery.payment_service.model.Payment;
@@ -15,7 +14,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/payments")
@@ -24,13 +22,10 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
-    @PostMapping("/initiate")
-    public ResponseEntity<InitiateResponse> initiate(@Valid @RequestBody InitiateRequest req) {
-        throw new IllegalStateException(
-                "Payments are initiated via Kafka (OrderCreatedEvent), not HTTP"
-        );
-//        InitiateResponse resp = paymentService.initiateOrder(req);
-//        return ResponseEntity.ok(resp);
+    @PostMapping("/initiate/{orderId}")
+    public ResponseEntity<InitiateResponse> makePayment(@Valid @PathVariable UUID orderId) {
+        InitiateResponse resp = paymentService.makePayment(orderId);
+        return ResponseEntity.ok(resp);
     }
 
     @PostMapping("/verify")

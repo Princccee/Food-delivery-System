@@ -1,4 +1,4 @@
-package com.fooddelivery.payment_service.Controller;
+package com.fooddelivery.payment_service.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
