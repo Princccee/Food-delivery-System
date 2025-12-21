@@ -5,6 +5,8 @@ import com.fooddelivery.restaurant_service.Repository.RestaurantRepository;
 import com.fooddelivery.restaurant_service.DTO.RestaurantRequest;
 import com.fooddelivery.restaurant_service.DTO.RestaurantResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -28,6 +30,7 @@ public class RestaurantService {
         return UUID.nameUUIDFromBytes(auth.getName().getBytes());
     }
 
+    @CacheEvict(value = "restaurants", allEntries = true)
     public RestaurantResponse createRestaurant(RestaurantRequest request) {
         Restaurant restaurant = Restaurant.builder()
                 .name(request.getName())
@@ -44,12 +47,14 @@ public class RestaurantService {
         return toResponse(saved);
     }
 
+    @Cacheable(value = "restaurants", key = "'all'")
     public List<RestaurantResponse> getAllRestaurants() {
         return restaurantRepository.findAll().stream()
                 .map(this::toResponse)
                 .toList();
     }
 
+    @Cacheable(value = "restaurants", key = "#id")
     public RestaurantResponse getRestaurant(UUID id) {
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Restaurant not found"));
