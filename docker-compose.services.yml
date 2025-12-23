@@ -1,0 +1,87 @@
+version: "3.8"
+
+services:
+
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8081:8081"
+    networks:
+      - food-network
+    depends_on:
+      - mysql
+      - kafka
+
+  restaurant-service:
+    build: ./restaurant-service
+    container_name: restaurant-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8082:8082"
+    networks:
+      - food-network
+    depends_on:
+      - mysql
+      - redis
+
+  order-service:
+    build: ./order-service
+    container_name: order-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8083:8083"
+    networks:
+      - food-network
+    depends_on:
+      - mysql
+      - kafka
+
+  payment-service:
+    build: ./payment-service
+    container_name: payment-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8084:8084"
+    networks:
+      - food-network
+    depends_on:
+      - mysql
+      - kafka
+
+  notification-service:
+    build: ./notification-service
+    container_name: notification-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "18085:8085"
+    networks:
+      - food-network
+    depends_on:
+      - kafka
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    ports:
+      - "8080:8080"
+    networks:
+      - food-network
+    depends_on:
+      - auth-service
+      - restaurant-service
+      - order-service
+      - payment-service
+
+networks:
+  food-network:
+    driver: bridge
+

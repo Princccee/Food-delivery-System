@@ -13,3 +13,7 @@ services:
 
 volumes:
   redis-data:
+
+networks:
+  food-network:
+    driver: bridge
