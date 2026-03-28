@@ -1,12 +1,17 @@
 package com.fooddelivery.restaurant_service.DTO;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RestaurantResponse {
     private UUID id;
     private String name;
@@ -15,4 +20,5 @@ public class RestaurantResponse {
     private String cuisineType;
     private Double rating;
     private boolean open;
+    private List<MenuItemResponse> menuItems;
 }

@@ -1,9 +1,12 @@
 package com.fooddelivery.restaurant_service.service;
 
-import com.fooddelivery.restaurant_service.restaurant.Restaurant;
-import com.fooddelivery.restaurant_service.Repository.RestaurantRepository;
+import com.fooddelivery.restaurant_service.DTO.MenuItemResponse;
 import com.fooddelivery.restaurant_service.DTO.RestaurantRequest;
 import com.fooddelivery.restaurant_service.DTO.RestaurantResponse;
+import com.fooddelivery.restaurant_service.Repository.MenuItemRepository;
+import com.fooddelivery.restaurant_service.Repository.RestaurantRepository;
+import com.fooddelivery.restaurant_service.restaurant.MenuItem;
+import com.fooddelivery.restaurant_service.restaurant.Restaurant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,14 +20,10 @@ import java.util.UUID;
 public class RestaurantService {
 
     private final RestaurantRepository restaurantRepository;
+    private final MenuItemRepository menuItemRepository;
 
     private UUID getCurrentOwnerId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        // For now, we only have email in principal. You can later map userId via another call if needed.
-        // For demo, we'll just simulate ownerId with a random UUID or store email string instead.
-        // Better: store ownerId as String email, but keeping UUID as placeholder.
-        // To keep it consistent, let's just use a dummy UUID here in demo.
-        // In a real setup, you might include userId as claim in JWT.
         return UUID.nameUUIDFromBytes(auth.getName().getBytes());
     }
 
@@ -40,7 +39,6 @@ public class RestaurantService {
                 .build();
 
         Restaurant saved = restaurantRepository.save(restaurant);
-
         return toResponse(saved);
     }
 
@@ -53,7 +51,14 @@ public class RestaurantService {
     public RestaurantResponse getRestaurant(UUID id) {
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Restaurant not found"));
-        return toResponse(restaurant);
+        
+        List<MenuItemResponse> menuItems = menuItemRepository.findByRestaurant_Id(id).stream()
+                .map(this::toMenuItemResponse)
+                .toList();
+
+        RestaurantResponse resp = toResponse(restaurant);
+        resp.setMenuItems(menuItems);
+        return resp;
     }
 
     private RestaurantResponse toResponse(Restaurant r) {
@@ -65,6 +70,17 @@ public class RestaurantService {
                 .cuisineType(r.getCuisineType())
                 .rating(r.getRating())
                 .open(r.isOpen())
+                .build();
+    }
+
+    private MenuItemResponse toMenuItemResponse(MenuItem m) {
+        return MenuItemResponse.builder()
+                .id(m.getId())
+                .name(m.getName())
+                .description(m.getDescription())
+                .price(m.getPrice())
+                .category(m.getCategory())
+                .available(m.isAvailable())
                 .build();
     }
 }
