@@ -79,11 +79,14 @@ services:
       - SPRING_CLOUD_GATEWAY_ROUTES_2_PREDICATES_0=Path=/api/orders/**
       - SPRING_CLOUD_GATEWAY_ROUTES_3_URI=http://payment-service:8084
       - SPRING_CLOUD_GATEWAY_ROUTES_3_PREDICATES_0=Path=/payments/**
+      - SPRING_CLOUD_GATEWAY_ROUTES_4_URI=http://notification-service:8085
+      - SPRING_CLOUD_GATEWAY_ROUTES_4_PREDICATES_0=Path=/notifications/**
     depends_on:
       - auth-service
       - restaurant-service
       - order-service
       - payment-service
+      - notification-service
 
   auth-service:
     build:
@@ -178,6 +181,9 @@ services:
       - SPRING_DATASOURCE_PASSWORD=Food@12345
       - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQLDialect
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
     depends_on:
       mysql-db:
         condition: service_healthy
+      kafka:
+        condition: service_started
