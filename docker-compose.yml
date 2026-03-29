@@ -96,7 +96,7 @@ services:
     ports:
       - "8081:8081"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/auth_db?autoReconnect=true&useSSL=false
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/auth_db?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=fooduser
       - SPRING_DATASOURCE_PASSWORD=Food@12345
       - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQLDialect
@@ -113,7 +113,7 @@ services:
     ports:
       - "8082:8082"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/restaurant_db?autoReconnect=true&useSSL=false
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/restaurant_db?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=fooduser
       - SPRING_DATASOURCE_PASSWORD=Food@12345
       - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQLDialect
@@ -130,7 +130,7 @@ services:
     ports:
       - "8083:8083"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/order_db?autoReconnect=true&useSSL=false
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/order_db?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=fooduser
       - SPRING_DATASOURCE_PASSWORD=Food@12345
       - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQLDialect
@@ -153,11 +153,14 @@ services:
     ports:
       - "8084:8084"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/payment_db?autoReconnect=true&useSSL=false
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/payment_db?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=fooduser
       - SPRING_DATASOURCE_PASSWORD=Food@12345
       - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQLDialect
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - RAZORPAY_KEY_ID=rzp_test_RqiwET76fWZTmI
+      - RAZORPAY_KEY_SECRET=98nJSn49tcufbh1W4RJcWiZI
+      - RAZORPAY_WEBHOOK_SECRET=MY_WEBHOOK_SECRET
       - ORDER_SERVICE_BASE_URL=http://order-service:8083
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:29092
     depends_on:
@@ -176,7 +179,7 @@ services:
     ports:
       - "8085:8085"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/notification_db?autoReconnect=true&useSSL=false
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/notification_db?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=fooduser
       - SPRING_DATASOURCE_PASSWORD=Food@12345
       - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQLDialect

@@ -16,6 +16,9 @@ import java.util.Map;
 @Configuration
 public class KafkaConsumerConfig {
 
+    @org.springframework.beans.factory.annotation.Value("${spring.kafka.bootstrap-servers}")
+    private String bootstrapServers;
+
     @Bean
     public ConsumerFactory<String, OrderCreatedEvent> consumerFactory() {
 
@@ -23,12 +26,12 @@ public class KafkaConsumerConfig {
                 new JsonDeserializer<>(OrderCreatedEvent.class);
 
         // 🔥 VERY IMPORTANT
-        deserializer.addTrustedPackages("com.fooddelivery.events");
+        deserializer.addTrustedPackages("com.fooddelivery.*");
         deserializer.setRemoveTypeHeaders(false);
         deserializer.setUseTypeMapperForKey(false);
 
         Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "payment-service");
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 

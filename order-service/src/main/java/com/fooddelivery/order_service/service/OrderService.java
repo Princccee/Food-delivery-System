@@ -24,7 +24,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final RestTemplate restTemplate; // bean to configure
-    private final String restaurantBaseUrl = "http://localhost:8082"; // or read from config
+    private final String restaurantBaseUrl = "http://restaurant-service:8082"; // correct for docker networking
     private final OrderEventProducer orderEventProducer;
 
     private UUID userIdFromEmail(String email) {
