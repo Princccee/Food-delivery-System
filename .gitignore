@@ -4,3 +4,7 @@ more_seed_data.sql
 seed_data.sql
 frontend_prompt_claude.md
 foodash/
+# Logs
+logs/
+*/logs/
+*.log
