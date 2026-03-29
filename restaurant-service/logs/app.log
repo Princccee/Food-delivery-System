@@ -1,0 +1,61 @@
+2026-03-29 09:39:02.719 [main] INFO  c.f.r.RestaurantServiceApplication - Starting RestaurantServiceApplication v0.0.1-SNAPSHOT using Java 17.0.18 with PID 1 (/app/app.jar started by root in /app)
+2026-03-29 09:39:02.810 [main] INFO  c.f.r.RestaurantServiceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-29 09:39:06.576 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-29 09:39:06.879 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 211 ms. Found 2 JPA repository interfaces.
+2026-03-29 09:39:10.907 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8082 (http)
+2026-03-29 09:39:11.263 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-29 09:39:11.328 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2026-03-29 09:39:12.145 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-29 09:39:12.158 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 9084 ms
+2026-03-29 09:39:14.617 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-29 09:39:15.050 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.1.Final
+2026-03-29 09:39:15.442 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-29 09:39:16.660 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-29 09:39:16.893 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-29 09:39:17.547 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@34ab26a
+2026-03-29 09:39:17.550 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-29 09:39:17.683 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-29 09:39:21.047 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-29 09:39:21.675 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-29 09:39:24.723 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-29 09:39:24.818 [main] WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 9b0d0fb1-92fa-4a6d-b348-012063e3552a
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-03-29 09:39:26.592 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@f09c282, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@560c3758, org.springframework.security.web.context.SecurityContextHolderFilter@49c555c3, org.springframework.security.web.header.HeaderWriterFilter@1028a747, org.springframework.web.filter.CorsFilter@43414b88, org.springframework.security.web.authentication.logout.LogoutFilter@3f3a529f, com.fooddelivery.restaurant_service.security.JwtAuthenticationFilter@7a3269f5, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@724e0a77, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@762db992, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@52a605c3, org.springframework.security.web.session.SessionManagementFilter@74070994, org.springframework.security.web.access.ExceptionTranslationFilter@71c69628, org.springframework.security.web.access.intercept.AuthorizationFilter@5f69462f]
+2026-03-29 09:39:28.140 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8082 (http) with context path ''
+2026-03-29 09:39:28.241 [main] INFO  c.f.r.RestaurantServiceApplication - Started RestaurantServiceApplication in 27.74 seconds (process running for 29.803)
+2026-03-29 09:40:41.107 [http-nio-8082-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-29 09:40:41.120 [http-nio-8082-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-29 09:40:41.205 [http-nio-8082-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 83 ms
+2026-03-29 09:45:28.224 [main] INFO  c.f.r.RestaurantServiceApplication - Starting RestaurantServiceApplication v0.0.1-SNAPSHOT using Java 17.0.18 with PID 1 (/app/app.jar started by root in /app)
+2026-03-29 09:45:28.245 [main] INFO  c.f.r.RestaurantServiceApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-29 09:45:31.825 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-29 09:45:32.023 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 138 ms. Found 2 JPA repository interfaces.
+2026-03-29 09:45:35.712 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8082 (http)
+2026-03-29 09:45:35.811 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-29 09:45:35.813 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.18]
+2026-03-29 09:45:36.113 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-29 09:45:36.120 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 7519 ms
+2026-03-29 09:45:39.764 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-29 09:45:40.133 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.4.1.Final
+2026-03-29 09:45:40.299 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-29 09:45:42.510 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-29 09:45:42.756 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-29 09:45:43.451 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6cd45b6c
+2026-03-29 09:45:43.462 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-29 09:45:43.918 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-29 09:45:46.455 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-29 09:45:46.910 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-29 09:45:49.978 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-29 09:45:50.082 [main] WARN  o.s.b.a.s.s.UserDetailsServiceAutoConfiguration - 
+
+Using generated security password: 7ec9744e-6f7c-465b-8b86-5b45cf2cb2f5
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-03-29 09:45:51.825 [main] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@52a605c3, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@13fad0c7, org.springframework.security.web.context.SecurityContextHolderFilter@762db992, org.springframework.security.web.header.HeaderWriterFilter@27422187, org.springframework.web.filter.CorsFilter@24fb8317, org.springframework.security.web.authentication.logout.LogoutFilter@344cf00f, com.fooddelivery.restaurant_service.security.JwtAuthenticationFilter@29050de5, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5812935, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@71e9640, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6d2f910b, org.springframework.security.web.session.SessionManagementFilter@49c555c3, org.springframework.security.web.access.ExceptionTranslationFilter@24890021, org.springframework.security.web.access.intercept.AuthorizationFilter@560c3758]
+2026-03-29 09:45:53.246 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8082 (http) with context path ''
+2026-03-29 09:45:53.412 [main] INFO  c.f.r.RestaurantServiceApplication - Started RestaurantServiceApplication in 27.436 seconds (process running for 30.002)
