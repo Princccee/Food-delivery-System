@@ -13,7 +13,7 @@ import java.util.UUID;
 public class InitiateResponse {
     private UUID paymentId;
     private String razorpayOrderId;
-    private String razorpayKeyId;
+    private String merchantKey;
     private Double amount;
     private String currency;
 }
