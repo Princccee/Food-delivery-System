@@ -27,29 +27,40 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
+        final String path = request.getRequestURI();
+        final String method = request.getMethod();
         final String authHeader = request.getHeader("Authorization");
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
         final String token = authHeader.substring(7);
-        if (jwtService.isTokenExpired(token)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+        try {
+            if (jwtService.isTokenExpired(token)) {
+                System.out.println("DEBUG: Token is expired for path: " + path);
+                filterChain.doFilter(request, response);
+                return;
+            }
 
-        String username = jwtService.extractUsername(token);
-        String role = jwtService.extractRole(token);
+            String username = jwtService.extractUsername(token);
+            String role = jwtService.extractRole(token);
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            var auth = new UsernamePasswordAuthenticationToken(
-                    username,
-                    null,
-                    List.of(new SimpleGrantedAuthority("ROLE_" + role))
-            );
-            auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(auth);
+            System.out.println("DEBUG: Authenticating User: " + username + " with Role: " + role + " for Path: " + path + " Method: " + method);
+
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                var auth = new UsernamePasswordAuthenticationToken(
+                        username,
+                        null,
+                        List.of(new SimpleGrantedAuthority("ROLE_" + role))
+                );
+                auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(auth);
+                System.out.println("DEBUG: Authentication set in SecurityContext for: " + username);
+            }
+        } catch (Exception e) {
+            System.err.println("DEBUG: JWT Validation failed for path " + path + ": " + e.getMessage());
         }
 
         filterChain.doFilter(request, response);
