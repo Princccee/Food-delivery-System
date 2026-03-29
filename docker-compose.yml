@@ -71,6 +71,7 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/cors.conf:/etc/nginx/conf.d/cors.conf:ro
+      - ./logs:/shared-logs
     depends_on:
       - auth-service
       - restaurant-service
@@ -85,6 +86,9 @@ services:
     container_name: auth-service
     ports:
       - "8081:8081"
+    volumes:
+      - ./auth-service/logs:/app/logs
+      - ./logs:/shared-logs
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/auth_db?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=fooduser
@@ -102,6 +106,9 @@ services:
     container_name: restaurant-service
     ports:
       - "8082:8082"
+    volumes:
+      - ./restaurant-service/logs:/app/logs
+      - ./logs:/shared-logs
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/restaurant_db?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=fooduser
@@ -119,6 +126,9 @@ services:
     container_name: order-service
     ports:
       - "8083:8083"
+    volumes:
+      - ./order-service/logs:/app/logs
+      - ./logs:/shared-logs
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/order_db?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=fooduser
@@ -142,6 +152,9 @@ services:
     container_name: payment-service
     ports:
       - "8084:8084"
+    volumes:
+      - ./payment-service/logs:/app/logs
+      - ./logs:/shared-logs
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/payment_db?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=fooduser
@@ -168,6 +181,9 @@ services:
     container_name: notification-service
     ports:
       - "8085:8085"
+    volumes:
+      - ./notification-service/logs:/app/logs
+      - ./logs:/shared-logs
     environment:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/notification_db?autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=fooduser
