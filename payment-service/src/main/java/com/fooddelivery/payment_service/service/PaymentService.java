@@ -10,6 +10,7 @@ import com.fooddelivery.payment_service.model.Payment;
 import com.fooddelivery.payment_service.model.PaymentStatus;
 import com.fooddelivery.payment_service.repository.PaymentRepository;
 import com.fooddelivery.payment_service.util.HmacUtils;
+import com.fooddelivery.payment_service.dto.OrderResponse;
 import com.fooddelivery.payment_service.events.OrderCreatedEvent;
 import lombok.extern.slf4j.Slf4j;
 import jakarta.transaction.Transactional;
@@ -49,11 +50,28 @@ public class PaymentService {
 
     private static final String RAZORPAY_ORDER_API = "https://api.razorpay.com/v1/orders";
 
-    @Transactional
     public InitiateResponse makePayment(UUID orderId) {
         // we have already registered the payment record in the DB, we just need to fetch that record and request the razorpay to accept payment.
 
-        Payment payment = paymentRepository.findByOrderId(orderId).orElseThrow(() -> new RuntimeException("Payment not found"));
+        int maxRetries = 5;
+        Payment payment = null;
+        
+        for (int i = 0; i < maxRetries; i++) {
+            payment = paymentRepository.findByOrderId(orderId).orElse(null);
+            if (payment != null) {
+                break;
+            }
+            log.info("⏳ Payment record not found for order {}, retrying in 1s (attempt {})", orderId, i + 1);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        if (payment == null) {
+            throw new RuntimeException("Payment not found for order " + orderId);
+        }
 
         // create Razorpay order
         Map<String, Object> payload = Map.of(
@@ -79,7 +97,13 @@ public class PaymentService {
 
         paymentRepository.save(payment);
 
-        return new InitiateResponse(payment.getId(), razorpayOrderId, razorpayKeyId, payment.getAmount(), payment.getCurrency());
+        return InitiateResponse.builder()
+                .paymentId(payment.getId())
+                .razorpayOrderId(razorpayOrderId)
+                .merchantKey(razorpayKeyId)
+                .amount(payment.getAmount())
+                .currency(payment.getCurrency())
+                .build();
 
     }
 
