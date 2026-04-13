@@ -24,6 +24,7 @@ public class RestaurantService {
 
     private UUID getCurrentOwnerId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        // Retrieve the userId we stored in the credentials field
         return UUID.fromString(auth.getCredentials().toString());
     }
 
