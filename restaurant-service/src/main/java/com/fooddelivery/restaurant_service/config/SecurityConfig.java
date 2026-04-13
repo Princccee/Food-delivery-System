@@ -40,7 +40,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/restaurants/**").hasRole("RESTAURANT_OWNER")
                         .requestMatchers(HttpMethod.PUT, "/restaurants/**").hasRole("RESTAURANT_OWNER")
                         .requestMatchers(HttpMethod.DELETE, "/restaurants/**").hasRole("RESTAURANT_OWNER")
-//                        .requestMatchers("/menu-items/**").hasRole("RESTAURANT_OWNER")
+                        .requestMatchers("/menu-items/**").hasRole("RESTAURANT_OWNER")
                         // any other must be authenticated
                         .anyRequest().authenticated()
                 )

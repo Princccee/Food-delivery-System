@@ -26,7 +26,8 @@ public class RestaurantService {
 
     private UUID getCurrentOwnerId() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        return UUID.nameUUIDFromBytes(auth.getName().getBytes());
+        // Retrieve the userId we stored in the credentials field
+        return UUID.fromString(auth.getCredentials().toString());
     }
 
     @CacheEvict(value = "restaurants", allEntries = true)
