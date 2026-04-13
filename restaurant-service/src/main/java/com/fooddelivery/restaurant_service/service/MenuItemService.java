@@ -4,6 +4,9 @@ import com.fooddelivery.restaurant_service.DTO.MenuItemRequest;
 import com.fooddelivery.restaurant_service.Repository.MenuItemRepository;
 import com.fooddelivery.restaurant_service.Repository.RestaurantRepository;
 import com.fooddelivery.restaurant_service.restaurant.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.AccessDeniedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,10 @@ public class MenuItemService {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new RuntimeException("Restaurant not found"));
 
+        if (!restaurant.getOwnerId().equals(getCurrentUserId())) {
+            throw new AccessDeniedException("You do not have permission to modify this restaurant's menu.");
+        }
+
         MenuItem item = MenuItem.builder()
                 .restaurant(restaurant)
                 .name(request.getName())
@@ -35,5 +42,10 @@ public class MenuItemService {
 
     public List<MenuItem> getMenuForRestaurant(UUID restaurantId) {
         return menuItemRepository.findByRestaurant_Id(restaurantId);
+    }
+
+    private UUID getCurrentUserId() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return UUID.fromString(auth.getCredentials().toString());
     }
 }
