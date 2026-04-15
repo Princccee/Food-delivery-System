@@ -31,9 +31,8 @@ public class OrderService {
         return UUID.nameUUIDFromBytes(email.getBytes());
     }
 
-    public OrderResponse placeOrder(String customerEmail, PlaceOrderRequest req) {
+    public OrderResponse placeOrder(UUID customerId, PlaceOrderRequest req) {
 
-        UUID customerId = userIdFromEmail(customerEmail);
         UUID restaurantId = req.getRestaurantId();
 
         // call restaurant-service to resolve prices

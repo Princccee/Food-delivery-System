@@ -19,6 +19,10 @@ public class JwtService {
         this.signingKey = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
+    public String extractUserId(String token) {
+        return extractClaim(token, claims -> claims.get("userId", String.class));
+    }
+
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(signingKey)

@@ -28,8 +28,9 @@ public class OrderController {
             Authentication authentication,
             @Valid @RequestBody PlaceOrderRequest request
     ) {
-        String email = authentication.getName(); // subject in JWT
-        OrderResponse resp = orderService.placeOrder(email, request);
+        // Get the real UUID from the token credentials
+        UUID userId = UUID.fromString(authentication.getCredentials().toString());
+        OrderResponse resp = orderService.placeOrder(userId, request);
         return ResponseEntity.ok(resp);
     }
 
@@ -40,7 +41,14 @@ public class OrderController {
 
     // customer orders
     @GetMapping("/customer/{customerId}")
-    public ResponseEntity<List<OrderResponse>> getByCustomer(@PathVariable UUID customerId) {
+    public ResponseEntity<List<OrderResponse>> getByCustomer(
+            Authentication authentication,
+            @PathVariable UUID customerId) {
+
+        UUID loggedInUserId = UUID.fromString(authentication.getCredentials().toString());
+        if (!loggedInUserId.equals(customerId)) {
+            return ResponseEntity.status(403).build(); // Block unauthorized access
+        }
         return ResponseEntity.ok(orderService.getOrdersByCustomer(customerId));
     }
 
@@ -50,16 +58,6 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getOrdersByRestaurant(restaurantId));
     }
 
-//    // restaurant owner updates status
-//    @PutMapping("/{orderId}/status")
-//    public ResponseEntity<OrderResponse> updateStatus(
-//            @PathVariable UUID orderId,
-//            @RequestParam OrderStatus status
-//    ) {
-//        return ResponseEntity.ok(orderService.updateOrderStatus(orderId, PaymentStatus.PENDING, status));
-//    }
-
-    // in your existing OrderController
     @PostMapping("/{orderId}/payment-callback")
     public ResponseEntity<?> paymentCallback(@PathVariable UUID orderId, @RequestBody Map<String, String> body) {
         String status = body.get("status");
