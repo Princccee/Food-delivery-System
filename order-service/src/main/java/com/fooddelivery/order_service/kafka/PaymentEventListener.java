@@ -14,22 +14,20 @@ import org.springframework.stereotype.Service;
 public class PaymentEventListener {
 
     private final OrderService orderService;
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    // REMOVE the ObjectMapper declaration completely
 
     @KafkaListener(topics = "payment-events", groupId = "order-service-group")
-    public void consumePaymentEvent(String message) {
-        log.info("Received PaymentEvent message: {}", message);
-        try {
-            PaymentEvent event = objectMapper.readValue(message, PaymentEvent.class);
-            log.info("Processing PaymentEvent for Order ID: {} with Status: {}", event.orderId(), event.paymentStatus());
+    public void consumePaymentEvent(PaymentEvent event) {
+        log.info("Processing PaymentEvent for Order ID: {} with Status: {}", event.orderId(), event.paymentStatus());
 
+        try {
             if ("SUCCESS".equalsIgnoreCase(event.paymentStatus()) || "PAID".equalsIgnoreCase(event.paymentStatus())) {
                 orderService.markPaid(event.orderId());
             } else if ("FAILED".equalsIgnoreCase(event.paymentStatus())) {
                 orderService.markPaymentFailed(event.orderId());
             }
         } catch (Exception e) {
-            log.error("Error deserializing PaymentEvent: {}", e.getMessage());
+            log.error("Error processing PaymentEvent: {}", e.getMessage());
         }
     }
 }
