@@ -75,7 +75,7 @@ public class PaymentService {
 
         // create Razorpay order
         Map<String, Object> payload = Map.of(
-                "amount", payment.getAmount(),
+                "amount", Math.round(payment.getAmount()),
                 "currency", payment.getCurrency(),
                 "receipt", payment.getOrderId().toString(),
                 "payment_capture", 1

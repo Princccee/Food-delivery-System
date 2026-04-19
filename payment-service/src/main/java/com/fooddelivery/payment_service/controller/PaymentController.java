@@ -36,13 +36,9 @@ public class PaymentController {
 
     @PostMapping("/webhook")
     public ResponseEntity<Void> webhook(
-            HttpServletRequest request,
+            @RequestBody String rawBody,
             @RequestHeader("X-Razorpay-Signature") String signature
-    ) throws IOException {
-
-        byte[] rawBytes = request.getInputStream().readAllBytes();
-        String rawBody = new String(rawBytes, StandardCharsets.UTF_8);
-
+    ) {
         paymentService.handleWebhook(rawBody, signature);
         return ResponseEntity.ok().build();
     }
