@@ -1,5 +1,6 @@
 package com.fooddelivery.notification_service.consumer;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fooddelivery.notification_service.events.OrderCreatedEvent;
 import com.fooddelivery.notification_service.model.NotificationType;
 import com.fooddelivery.notification_service.service.NotificationService;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class OrderCreatedConsumer {
 
     private final NotificationService notificationService;
-    private final com.fasterxml.jackson.databind.ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     @KafkaListener(topics = "order-created", groupId = "notification-group")
     public void consume(String messageJson) {
@@ -25,11 +26,11 @@ public class OrderCreatedConsumer {
             String message = String.format("Hi! Your order #%s has been successfully received and is being prepared.", 
                     event.orderId().toString().substring(0, 8));
             
-            String recipient = "customer@example.com"; 
+            String recipient = event.customerEmail() != null ? event.customerEmail() : "customer@example.com"; 
 
-            notificationService.createNotification(event.orderId(), NotificationType.ORDER_RECEIVED, message, recipient);
+            notificationService.createNotification(event.orderId(), event.customerId(), NotificationType.ORDER_RECEIVED, message, recipient);
         } catch (Exception e) {
-            log.error("Error deserializing OrderCreatedEvent: {}", e.getMessage());
+            log.error("Error processing OrderCreatedEvent: {}", e.getMessage(), e);
         }
     }
 }
