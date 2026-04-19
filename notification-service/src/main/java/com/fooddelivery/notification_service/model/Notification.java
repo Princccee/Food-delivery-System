@@ -19,6 +19,8 @@ public class Notification {
 
     private UUID orderId;
 
+    private UUID customerId;
+
     @Enumerated(EnumType.STRING)
     private NotificationType type;
 
@@ -27,7 +29,8 @@ public class Notification {
 
     private String recipient;
 
-    private String status; // SENT, FAILED
+    @Enumerated(EnumType.STRING)
+    private NotificationStatus status; // PENDING, SENT, FAILED
 
     private Instant createdAt;
 }

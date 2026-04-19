@@ -17,10 +17,17 @@ public class NotificationController {
     private final NotificationRepository notificationRepository;
 
     @GetMapping("/customer/{customerId}")
-    public ResponseEntity<List<Notification>> getNotifications(@PathVariable String customerId) {
-        // In a real app, we'd filter by customerId. For now, we return all or handle based on orderId
-        // Since our mock recipient is "customer@example.com", we'll just return all for simplicity
-        // or filter by status/orderId if needed.
+    public ResponseEntity<List<Notification>> getNotificationsByCustomer(@PathVariable UUID customerId) {
+        return ResponseEntity.ok(notificationRepository.findByCustomerId(customerId));
+    }
+
+    @GetMapping("/order/{orderId}")
+    public ResponseEntity<List<Notification>> getNotificationsByOrder(@PathVariable UUID orderId) {
+        return ResponseEntity.ok(notificationRepository.findByOrderId(orderId));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Notification>> getAllNotifications() {
         return ResponseEntity.ok(notificationRepository.findAll());
     }
 }
