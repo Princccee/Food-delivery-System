@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  logback-test.xml — ONLY used during test execution.
+  Overrides the production logback-spring.xml so tests don't try to
+  write to /shared-logs (a Docker-only path).
+  Logback picks up *-test.xml automatically over the production config.
+-->
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <root level="WARN">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <!-- Show our own code at INFO so we can still read meaningful test output -->
+    <logger name="com.fooddelivery" level="INFO"/>
+</configuration>
